@@ -39,6 +39,9 @@ int main(void)
 }
 
 /*
+sudo apt update
+sudo apt install flex bison gcc
+
 bison -d variable_4b.y
 flex variable_4a.l
 gcc variable_4a.tab.c lex.yy.c -o variable_4a
