@@ -1,95 +1,56 @@
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 
-char Keywords[][10] = {
-    "if", "else", "while", "for", "int",
-    "float", "char", "double", "return",
-    "void", "main"
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+char keywords[][10] = {
+    "int", "float", "char", "if", "else",
+    "while", "for", "return", "void", "main"
 };
 
-int isKeyword(char str[])
-{
-    int n = sizeof(Keywords) / sizeof(Keywords[0]);
+int main() {
+    char s[200], token[50];
+    int i = 0, j, found;
 
-    for (int i = 0; i < n; i++)
-    {
-        if (strcmp(str, Keywords[i]) == 0)
-            return 1;
-    }
-    return 0;
-}
+    printf("Enter input: ");
+    fgets(s, sizeof(s), stdin);
 
-int main()
-{
-    char input[200], token[50];
-    int i = 0, j;
-
-    printf("Enter the input line:\n");
-    fgets(input, sizeof(input), stdin);
-
-    input[strcspn(input, "\n")] = '\0';
-
-    while (input[i] != '\0')
-    {
-        if (isspace(input[i]))
-        {
+    while (s[i] != '\0') {
+        if (isspace(s[i])) {
             i++;
-            continue;
         }
-
-        if (isalpha(input[i]) || input[i] == '_')
-        {
+        else if (isalpha(s[i]) || s[i] == '_') {
             j = 0;
 
-            while (isalnum(input[i]) || input[i] == '_')
-            {
-                token[j++] = input[i++];
-            }
+            while (isalnum(s[i]) || s[i] == '_')
+                token[j++] = s[i++];
 
             token[j] = '\0';
+            found = 0;
 
-            if (isKeyword(token))
-                printf("%s ----> Keyword\n", token);
+            for (int k = 0; k < 10; k++) {
+                if (strcmp(token, keywords[k]) == 0)
+                    found = 1;
+            }
+
+            if (found)
+                printf("%s -> Keyword\n", token);
             else
-                printf("%s ----> Identifier\n", token);
+                printf("%s -> Identifier\n", token);
         }
-
-        else if (isdigit(input[i]))
-        {
-            j = 0;
-
-            while (isdigit(input[i]))
-            {
-                token[j++] = input[i++];
-            }
-
-            token[j] = '\0';
-
-            printf("%s ----> Digit\n", token);
+        else if (isdigit(s[i])) {
+            printf("%c -> Digit\n", s[i++]);
         }
-
-        else if (strchr("+-*/%=<>", input[i]))
-        {
-            printf("%c ----> Operator\n", input[i]);
-            i++;
+        else if (strchr("+-*/%=<>", s[i])) {
+            printf("%c -> Operator\n", s[i++]);
         }
-
-        else if (strchr(";,:", input[i]))
-        {
-            printf("%c ----> Separator\n", input[i]);
-            i++;
+        else if (strchr(";,:", s[i])) {
+            printf("%c -> Separator\n", s[i++]);
         }
-
-        else if (strchr("(){}[]", input[i]))
-        {
-            printf("%c ----> Special Symbol\n", input[i]);
-            i++;
+        else if (strchr("(){}[]", s[i])) {
+            printf("%c -> Special Symbol\n", s[i++]);
         }
-
-        else
-        {
-            printf("%c ----> Unknown Symbol\n", input[i]);
+        else {
             i++;
         }
     }
