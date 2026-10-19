@@ -1,36 +1,30 @@
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
 
 struct node {
     char data;
-    struct node *left;
-    struct node *right;
+    struct node *left, *right;
 };
 
-struct node* create(char data, struct node* left, struct node* right)
-{
+struct node* create(char c, struct node* l, struct node* r) {
     struct node* n = malloc(sizeof(struct node));
-    n->data = data;
-    n->left = left;
-    n->right = right;
+    n->data = c;
+    n->left = l;
+    n->right = r;
     return n;
 }
 
-void print(struct node* root)
-{
-    if(root == NULL)
-        return;
-
-    printf("%c ", root->data);
-    print(root->left);
-    print(root->right);
+void print(struct node* n) {
+    if (n == NULL) return;
+    printf("%c ", n->data);
+    print(n->left);
+    print(n->right);
 }
 
-int yylex();
+int yylex(void);
 void yyerror(char *s);
-
-struct node* root;
 %}
 
 %union {
@@ -40,33 +34,32 @@ struct node* root;
 %token NUMBER
 %type <ptr> E T F
 
+%start E
+
 %%
 
-E : E '+' T { $$ = create('+', $1, $3); root = $$; }
-  | T        { $$ = $1; root = $$; }
+E : E '+' T  { $$ = create('+', $1, $3); }
+  | T        { $$ = $1; }
   ;
 
-T : T '*' F { $$ = create('*', $1, $3); }
+T : T '*' F  { $$ = create('*', $1, $3); }
   | F        { $$ = $1; }
   ;
 
-F : NUMBER  { $$ = create('N', NULL, NULL); }
+F : NUMBER   { $$ = create('N', NULL, NULL); }
   ;
 
 %%
 
-void yyerror(char *s)
-{
-    printf("Invalid Expression\n");
+void yyerror(char *s) {
+    printf("Invalid expression\n");
 }
 
-int main()
-{
+int main() {
     printf("Enter expression: ");
-    yyparse();
-
-    printf("AST (Preorder): ");
-    print(root);
-
+    if (yyparse() == 0) {
+        printf("AST (Preorder): ");
+        print($$.ptr);
+    }
     return 0;
 }
