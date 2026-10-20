@@ -1,52 +1,39 @@
-#include <stdio.h>
 
+#include <stdio.h>
 #define MAX 5
 
-int stack[MAX];
-int top = -1;
+int stack[MAX], top = -1;
 
-// Allocate memory
-void allocate(int value)
+void allocate(int x)
 {
     if (top == MAX - 1)
-    {
         printf("Stack Overflow\n");
-        return;
+    else
+    {
+        stack[++top] = x;
+        printf("Allocated: %d\n", x);
     }
-
-    stack[++top] = value;
-    printf("Allocated: %d\n", value);
 }
 
-// Deallocate memory
 void deallocate()
 {
     if (top == -1)
-    {
         printf("Stack Underflow\n");
-        return;
-    }
-
-    printf("Deallocated: %d\n", stack[top--]);
+    else
+        printf("Deallocated: %d\n", stack[top--]);
 }
 
-// Display allocated memory
 void display()
 {
-    int i;
-
     if (top == -1)
-    {
         printf("Stack is empty\n");
-        return;
+    else
+    {
+        printf("Allocated memory: ");
+        for (int i = 0; i <= top; i++)
+            printf("%d ", stack[i]);
+        printf("\n");
     }
-
-    printf("Allocated memory: ");
-
-    for (i = 0; i <= top; i++)
-        printf("%d ", stack[i]);
-
-    printf("\n");
 }
 
 int main()
@@ -56,9 +43,7 @@ int main()
     allocate(30);
 
     display();
-
     deallocate();
-
     display();
 
     return 0;
