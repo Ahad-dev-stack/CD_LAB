@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 
@@ -8,51 +9,38 @@ void E();
 void T();
 void F();
 
-void E()
-{
+void E() {
     T();
-
-    while (input[i] == '+')
-    {
+    while (input[i] == '+') {
         i++;
         T();
     }
 }
 
-void T()
-{
+void T() {
     F();
-
-    while (input[i] == '*')
-    {
+    while (input[i] == '*') {
         i++;
         F();
     }
 }
 
-void F()
-{
+void F() {
     if (strncmp(&input[i], "id", 2) == 0)
-    {
         i += 2;
-    }
-    else if (input[i] == '(')
-    {
+    else if (input[i] == '(') {
         i++;
         E();
-
         if (input[i] == ')')
             i++;
     }
-    else
-    {
+    else {
         printf("Invalid Expression\n");
         return;
     }
 }
 
-int main()
-{
+int main() {
     printf("Enter expression: ");
     scanf("%99s", input);
 
