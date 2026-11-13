@@ -112,8 +112,17 @@ int main() {
             else
                 printf("%s -> Identifier\n", token);
         }
-        else if (isdigit(s[i])) {
-            printf("%c -> Digit\n", s[i++]);
+        else if (isdigit(s[i])) 
+        {
+            j = 0;
+        
+            while (isdigit(s[i])) {
+                token[j++] = s[i++];
+            }
+        
+            token[j] = '\0';
+        
+            printf("%s -> Number\n", token);
         }
         else if (strchr("+-*/%=<>", s[i])) {
             printf("%c -> Operator\n", s[i++]);
