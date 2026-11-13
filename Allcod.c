@@ -242,3 +242,189 @@ int main()
     return 0;
 }
 
+
+
+#include <stdio.h>
+#include <string.h>
+
+char input[100];
+int i = 0;
+
+void E();
+void T();
+void F();
+
+void E() {
+    T();
+    while (input[i] == '+') {
+        i++;
+        T();
+    }
+}
+
+void T() {
+    F();
+    while (input[i] == '*') {
+        i++;
+        F();
+    }
+}
+
+void F() {
+    if (strncmp(&input[i], "id", 2) == 0)
+        i += 2;
+    else if (input[i] == '(') {
+        i++;
+        E();
+        if (input[i] == ')')
+            i++;
+    }
+    else {
+        printf("Invalid Expression\n");
+        return;
+    }
+}
+
+int main() {
+    printf("Enter expression: ");
+    scanf("%99s", input);
+
+    E();
+
+    if (input[i] == '\0')
+        printf("Valid Expression\n");
+    else
+        printf("Invalid Expression\n");
+
+    return 0;
+}
+
+
+#include <stdio.h>
+#include <string.h>
+
+char input[100];
+int i = 0;
+
+void S();
+void L();
+void Lprime();
+
+/* S -> (L) | a */
+void S()
+{
+    if (input[i] == 'a')
+    {
+        i++;
+    }
+    else if (input[i] == '(')
+    {
+        i++;
+        L();
+
+        if (input[i] == ')')
+            i++;
+        else
+        {
+            printf("Invalid Expression\n");
+            return;
+        }
+    }
+    else
+    {
+        printf("Invalid Expression\n");
+        return;
+    }
+}
+
+/* L -> S L' */
+void L()
+{
+    S();
+    Lprime();
+}
+
+/* L' -> , S L' | epsilon */
+void Lprime()
+{
+    if (input[i] == ',')
+    {
+        i++;
+        S();
+        Lprime();
+    }
+}
+
+int main()
+{
+    printf("Enter the expression: ");
+    scanf("%s", input);
+
+    S();
+
+    if (input[i] == '\0')
+        printf("Valid Expression\n");
+    else
+        printf("Invalid Expression\n");
+
+    return 0;
+}
+
+
+#include <stdio.h>
+
+char E[10], T[10], F[10];
+int ne = 0, nt = 0, nf = 0;
+
+void add(char s[], int *n, char c)
+{
+    for (int i = 0; i < *n; i++)
+        if (s[i] == c)
+            return;
+
+    s[(*n)++] = c;
+}
+
+void FIRST_F()
+{
+    add(F, &nf, '(');
+    add(F, &nf, 'i');
+}
+
+void FIRST_T()
+{
+    FIRST_F();
+
+    for (int i = 0; i < nf; i++)
+        add(T, &nt, F[i]);
+}
+
+void FIRST_E()
+{
+    FIRST_T();
+
+    for (int i = 0; i < nt; i++)
+        add(E, &ne, T[i]);
+}
+
+void display(char name[], char s[], int n)
+{
+    printf("FIRST(%s) = { ", name);
+
+    for (int i = 0; i < n; i++)
+        printf("%s%c", i ? ", " : "", s[i]);
+
+    printf(" }\n");
+}
+
+int main()
+{
+    FIRST_E();
+
+    display("E", E, ne);
+    display("T", T, nt);
+    display("F", F, nf);
+
+    return 0;
+}
+
